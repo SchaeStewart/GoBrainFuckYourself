@@ -77,7 +77,7 @@ func FindLoops(input []Instruction) map[int]int {
 }
 
 func Run(input []Instruction) {
-	stack := make([]int, 50)
+	stack := make([]int, 100000)
 	pointer := 0
 	loopPositions := FindLoops(input)
 
