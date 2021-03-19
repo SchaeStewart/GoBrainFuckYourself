@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"bufio"
+	"fmt"
+	"io/ioutil"
 	"os"
 )
 
@@ -77,7 +78,7 @@ func FindLoops(input []Instruction) map[int]int {
 
 func Run(input []Instruction) {
 	stack := make([]int, 50)
-	pointer := 0 
+	pointer := 0
 	loopPositions := FindLoops(input)
 
 	reader := bufio.NewReader(os.Stdin)
@@ -113,6 +114,27 @@ func Run(input []Instruction) {
 	}
 }
 
+func Parse(input string) []Instruction {
+	instructions := make([]Instruction, 0, len(input))
+	for _, r := range input {
+		if IsValidInstruction(r) {
+			instructions = append(instructions, Instruction(r))
+		}
+	}
+	return instructions
+}
+
 func main() {
-	fmt.Println("hello")
+	if len(os.Args) < 2 {
+		fmt.Println("must provide a file path")
+		return
+	}
+	path := os.Args[1]
+
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		fmt.Println("unable to read file")
+	}
+	input := Parse(string(b))
+	Run(input)
 }
