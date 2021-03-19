@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"bufio"
+	"os"
+)
 
 type Instruction string
 
@@ -76,6 +80,8 @@ func Run(input []Instruction) {
 	pointer := 0 
 	loopPositions := FindLoops(input)
 
+	reader := bufio.NewReader(os.Stdin)
+
 	for i := 0; i < len(input); i++ {
 		ins := input[i]
 		switch ins {
@@ -90,7 +96,11 @@ func Run(input []Instruction) {
 		case Output:
 			fmt.Print(string(stack[pointer]))
 		case Input:
-			// TODO:
+			char, _, err := reader.ReadRune()
+			if err != nil {
+				panic(err)
+			}
+			stack[pointer] = int(char)
 		case LoopStart:
 			if stack[pointer] == 0 {
 				i = loopPositions[i]
